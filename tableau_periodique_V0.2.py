@@ -186,14 +186,19 @@ class PeriodicTableApp:
         self.details_label.pack(fill="x", padx=10, pady=10)
 
     def show_element_details(self, element):
-        """Afficher les détails d'un élément dans la zone de détails."""
         atomic_number, symbol, name, atomic_mass, category = element
+        # Exemple de données supplémentaires
+        electron_config = "1s² 2s² 2p⁶"  # À remplacer par les vraies données
+        discovery_year = 1800  # À remplacer par les vraies données
+
         details = (
             f"Nom : {name}\n"
             f"Symbole : {symbol}\n"
             f"Numéro atomique : {atomic_number}\n"
             f"Masse atomique : {atomic_mass}\n"
-            f"Catégorie : {category}"
+            f"Catégorie : {category}\n"
+            f"Configuration électronique : {electron_config}\n"
+            f"Année de découverte : {discovery_year}"
         )
         self.details_label.config(text=details)
 
