@@ -4,6 +4,7 @@ from tkinter import Toplevel, Label
 
 # Liste des éléments chimiques (numéro atomique, symbole, nom, masse atomique, catégorie)
 elements = [
+    
     (1, "H", "Hydrogène", 1.008, "Non-métal"),
     (2, "He", "Hélium", 4.0026, "Gaz noble"),
     (3, "Li", "Lithium", 6.94, "Métal alcalin"),
@@ -126,6 +127,7 @@ elements = [
 
 # Catégories et leurs couleurs correspondantes
 category_colors = {
+    
     "Non-métal": "#F0E68C",  # Khaki
     "Gaz noble": "#FFD700",  # Gold
     "Métal alcalin": "#FFB6C1",  # Light Pink
@@ -137,6 +139,19 @@ category_colors = {
     "Lanthanides": "#FFC0CB",  # Pink
     "Actinides": "#FF69B4",  # Hot Pink
 }
+
+# Layout of the periodic table
+periodic_table_layout = [
+    [1, 2, None, None, None, None, None, None, None, None, None, None, None, None, None, None, 17, 18],
+    [3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18],
+    [19, 20, 21, 22, 23, 24, 25, 26, 27, 28, 29, 30, 31, 32, 33, 34, 35, 36],
+    [37, 38, 39, 40, 41, 42, 43, 44, 45, 46, 47, 48, 49, 50, 51, 52, 53, 54],
+    [55, 56, 57, 72, 73, 74, 75, 76, 77, 78, 79, 80, 81, 82, 83, 84, 85, 86],
+    [87, 88, 89, 104, 105, 106, 107, 108, 109, 110, 111, 112, 113, 114, 115, 116, 117, 118],
+    [None, None, None, None, None, None, None, None, None, None, None, None, None, None, None, None, None, None],
+    [58, 59, 60, 61, 62, 63, 64, 65, 66, 67, 68, 69, 70, 71],
+    [90, 91, 92, 93, 94, 95, 96, 97, 98, 99, 100, 101, 102, 103]
+]
 
 class PeriodicTableApp:
     def __init__(self, root):
@@ -150,28 +165,34 @@ class PeriodicTableApp:
         frame = tk.Frame(self.root)
         frame.pack(pady=10)
 
-        for element in elements:
-            atomic_number, symbol, name, atomic_mass, category = element
-            color = category_colors.get(category, "#FFFFFF")  # Blanc par défaut
+        # Create a dictionary to map atomic numbers to element details
+        element_dict = {element[0]: element for element in elements}
 
-            # Créer un bouton pour chaque élément
-            btn = tk.Button(
-                frame,
-                text=f"{symbol}\n{atomic_number}",
-                bg=color,
-                width=6,
-                height=3,
-                font=("Arial", 10),
-                command=lambda e=element: self.show_element_details(e)
-            )
+        # Iterate through the periodic table layout
+        for row_idx, row in enumerate(periodic_table_layout):
+            for col_idx, atomic_number in enumerate(row):
+                if atomic_number is not None:
+                    element = element_dict.get(atomic_number)
+                    if element:
+                        atomic_number, symbol, name, atomic_mass, category = element
+                        color = category_colors.get(category, "#FFFFFF")  # Blanc par défaut
 
-            # Ajouter un tooltip pour chaque bouton
-            Tooltip(btn, f"Nom : {name}\nMasse atomique : {atomic_mass}")
+                        # Créer un bouton pour chaque élément
+                        btn = tk.Button(
+                            frame,
+                            text=f"{symbol}\n{atomic_number}",
+                            bg=color,
+                            width=6,
+                            height=3,
+                            font=("Arial", 10),
+                            command=lambda e=element: self.show_element_details(e)
+                        )
 
-            # Position dans la grille (simplifiée pour la démo)
-            row = (atomic_number - 1) // 18  # 18 colonnes pour correspondre au tableau périodique
-            col = (atomic_number - 1) % 18
-            btn.grid(row=row, column=col, padx=2, pady=2)
+                        # Ajouter un tooltip pour chaque bouton
+                        Tooltip(btn, f"Nom : {name}\nMasse atomique : {atomic_mass}")
+
+                        # Position dans la grille
+                        btn.grid(row=row_idx, column=col_idx, padx=2, pady=2)
 
         # Créer une zone d'affichage des détails
         self.details_label = ttk.Label(
